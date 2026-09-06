@@ -1,0 +1,176 @@
+// ============ FOOTER YEAR ============
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// ============ MOBILE NAV ============
+const navToggle = document.getElementById('nav-toggle');
+const mainNav = document.getElementById('main-nav');
+navToggle.addEventListener('click', () => {
+  const isOpen = mainNav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen);
+});
+mainNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => mainNav.classList.remove('open'));
+});
+
+// ============ ACTIVE NAV ON SCROLL ============
+const sections = ['top','listings','move','about','contact'].map(id => document.getElementById(id)).filter(Boolean);
+const navLinks = [...mainNav.querySelectorAll('a')];
+const setActive = () => {
+  let current = sections[0];
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) current = sec;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current.id);
+  });
+};
+window.addEventListener('scroll', setActive, { passive: true });
+setActive();
+
+// ============ ANIMATED STAT COUNTERS (one orchestrated reveal) ============
+const counters = document.querySelectorAll('.stat-number[data-count-to]');
+const animateCounter = (el) => {
+  const target = parseFloat(el.dataset.countTo);
+  const decimals = parseInt(el.dataset.decimal || '0', 10);
+  const duration = 1400;
+  const start = performance.now();
+  const step = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = target * eased;
+    el.textContent = decimals ? value.toFixed(decimals) : Math.round(value);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+};
+if (counters.length) {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.6 });
+  counters.forEach(c => obs.observe(c));
+}
+
+// ============ GALLERY ============
+// NOTE: these are art-directed placeholder tiles (CSS gradients standing in for photography).
+// Swap the `bg` values below for real image paths (e.g. 'images/gallery-01.jpg') once photos
+// are downloaded from the live site — see IMAGES-NEEDED.md for the full list.
+const galleryItems = [
+  { label: 'Spring Mountains at dusk', bg: 'linear-gradient(135deg,#223140,#5a4a35)', big: true },
+  { label: 'Downtown Pahrump', bg: 'linear-gradient(135deg,#A8501F,#C79A3E)' },
+  { label: 'Valley vineyard rows', bg: 'linear-gradient(135deg,#6C7A5B,#3f4a34)' },
+  { label: 'Home for sale — front elevation', bg: 'linear-gradient(135deg,#7E3B15,#C79A3E)' },
+  { label: 'Mountain Falls community', bg: 'linear-gradient(135deg,#223140,#6C7A5B)' },
+  { label: 'Desert sunrise', bg: 'linear-gradient(135deg,#C79A3E,#A8501F)' },
+  { label: 'Backyard patio & pool', bg: 'linear-gradient(135deg,#3f4a34,#223140)' },
+  { label: 'Kitchen, recently sold', bg: 'linear-gradient(135deg,#A8501F,#7E3B15)' },
+  { label: 'Open range, Nye County', bg: 'linear-gradient(135deg,#6C7A5B,#C79A3E)' },
+];
+
+const galleryGrid = document.getElementById('gallery-grid');
+galleryItems.forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'gallery-item' + (item.big ? ' big' : '');
+  el.style.backgroundImage = item.bg;
+  el.innerHTML = `<span>${item.label}</span>`;
+  el.addEventListener('click', () => openLightbox(item.bg));
+  galleryGrid.appendChild(el);
+});
+
+const lightbox = document.getElementById('lightbox');
+const lightboxMedia = document.getElementById('lightbox-media');
+function openLightbox(bg) {
+  lightboxMedia.style.backgroundImage = bg;
+  lightbox.classList.add('open');
+}
+document.getElementById('lightbox-close').addEventListener('click', () => lightbox.classList.remove('open'));
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+
+// ============ LISTINGS (sample data + client-side filter/sort) ============
+const sampleListings = [
+  { addr: '412 Calvada Blvd, Pahrump, NV', price: 349000, beds: 3, baths: 2, type: 'single-family', date: '2026-08-20', bg: 'linear-gradient(135deg,#A8501F,#C79A3E)' },
+  { addr: '88 Mountain Falls Dr, Pahrump, NV', price: 525000, beds: 4, baths: 3, type: 'single-family', date: '2026-07-02', bg: 'linear-gradient(135deg,#223140,#6C7A5B)' },
+  { addr: '215 Basin Ave, Pahrump, NV', price: 189000, beds: 2, baths: 1, type: 'manufactured', date: '2026-08-30', bg: 'linear-gradient(135deg,#6C7A5B,#3f4a34)' },
+  { addr: '9 Homestead Rd, Pahrump, NV', price: 95000, beds: 0, baths: 0, type: 'land', date: '2026-06-15', bg: 'linear-gradient(135deg,#C79A3E,#7E3B15)' },
+  { addr: '760 Ridgecrest Way, Pahrump, NV', price: 412000, beds: 3, baths: 2, type: 'single-family', date: '2026-08-05', bg: 'linear-gradient(135deg,#7E3B15,#223140)' },
+  { addr: '33 Vineyard Ct, Pahrump, NV', price: 275000, beds: 2, baths: 2, type: 'condo', date: '2026-07-22', bg: 'linear-gradient(135deg,#3f4a34,#A8501F)' },
+];
+
+const listingGrid = document.getElementById('listing-grid');
+
+function money(n) {
+  return '$' + n.toLocaleString('en-US');
+}
+
+function renderListings(items) {
+  listingGrid.innerHTML = '';
+  if (!items.length) {
+    listingGrid.innerHTML = '<p class="listing-empty">No sample listings match those filters — try widening your search.</p>';
+    return;
+  }
+  items.forEach(item => {
+    const card = document.createElement('article');
+    card.className = 'listing-card';
+    const bedsBaths = item.type === 'land'
+      ? 'Vacant land'
+      : `${item.beds} bd &middot; ${item.baths} ba`;
+    card.innerHTML = `
+      <div class="listing-photo" style="background-image:${item.bg}"></div>
+      <div class="listing-body">
+        <p class="listing-price">${money(item.price)}</p>
+        <p class="listing-addr">${item.addr}</p>
+        <p class="listing-meta">${bedsBaths}</p>
+      </div>`;
+    listingGrid.appendChild(card);
+  });
+}
+renderListings(sampleListings);
+
+document.getElementById('search-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const type = document.getElementById('f-type').value;
+  const sort = document.getElementById('f-sort').value;
+  const beds = parseInt(document.getElementById('f-beds').value, 10);
+  const baths = parseInt(document.getElementById('f-baths').value, 10);
+  const min = parseFloat(document.getElementById('f-min').value) || 0;
+  const max = parseFloat(document.getElementById('f-max').value) || Infinity;
+
+  let results = sampleListings.filter(item =>
+    (!type || item.type === type) &&
+    item.beds >= beds &&
+    item.baths >= baths &&
+    item.price >= min &&
+    item.price <= max
+  );
+
+  const sorters = {
+    newest: (a, b) => new Date(b.date) - new Date(a.date),
+    oldest: (a, b) => new Date(a.date) - new Date(b.date),
+    'price-asc': (a, b) => a.price - b.price,
+    'price-desc': (a, b) => b.price - a.price,
+    'beds-asc': (a, b) => a.beds - b.beds,
+    'beds-desc': (a, b) => b.beds - a.beds,
+  };
+  results.sort(sorters[sort] || sorters.newest);
+  renderListings(results);
+  document.getElementById('listing-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// ============ CONTACT FORM (front-end only — no backend wired up) ============
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+contactForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!contactForm.checkValidity()) {
+    formStatus.textContent = 'Please fill in your name and a valid email.';
+    return;
+  }
+  const name = document.getElementById('c-name').value.trim();
+  formStatus.textContent = `Thanks${name ? ', ' + name : ''} — Marci's team will be in touch shortly.`;
+  contactForm.reset();
+});
