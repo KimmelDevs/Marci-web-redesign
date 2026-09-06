@@ -98,71 +98,79 @@
 </section>
 
 <!-- ================= LISTINGS SEARCH ================= -->
-<section class="listings" id="listings">
+<section class="listings c1-bg" id="listings">
   <div class="section-head light">
-    <p class="label">Find your dream home</p>
+    <p class="label light">Find your dream home</p>
     <h2>Search listings</h2>
   </div>
 
-  <form class="search-panel" id="search-form">
-    <div class="search-row">
+  <form class="search-card" id="search-form">
+    <div class="search-card-grid">
       <div class="field">
         <label for="f-location">Location</label>
         <input type="text" id="f-location" placeholder="Pahrump, NV">
       </div>
       <div class="field">
         <label for="f-type">Type</label>
-        <select id="f-type">
-          <option value="">Any type</option>
-          <option value="single-family">Single Family</option>
-          <option value="manufactured">Manufactured</option>
-          <option value="land">Land</option>
-          <option value="condo">Condo</option>
-        </select>
+        <div class="select-wrap">
+          <select id="f-type">
+            <option value="">Any type</option>
+            <option value="single-family">Single Family</option>
+            <option value="manufactured">Manufactured</option>
+            <option value="land">Land</option>
+            <option value="condo">Condo</option>
+          </select>
+        </div>
       </div>
       <div class="field">
         <label for="f-sort">Sort by</label>
-        <select id="f-sort">
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="price-asc">Least expensive to most</option>
-          <option value="price-desc">Most expensive to least</option>
-          <option value="beds-asc">Bedrooms (low to high)</option>
-          <option value="beds-desc">Bedrooms (high to low)</option>
-        </select>
+        <div class="select-wrap tick">
+          <select id="f-sort">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="price-asc">Least expensive to most</option>
+            <option value="price-desc">Most expensive to least</option>
+            <option value="beds-asc">Bedrooms (low to high)</option>
+            <option value="beds-desc">Bedrooms (high to low)</option>
+          </select>
+          <span class="tick-icon" aria-hidden="true"></span>
+        </div>
       </div>
-    </div>
-    <div class="search-row">
       <div class="field">
         <label for="f-beds">Bedrooms</label>
-        <select id="f-beds">
-          <option value="0">Any number</option>
-          <option value="1">1+</option>
-          <option value="2">2+</option>
-          <option value="3">3+</option>
-          <option value="4">4+</option>
-          <option value="5">5+</option>
-        </select>
+        <div class="select-wrap">
+          <select id="f-beds">
+            <option value="0">Any number</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5+</option>
+          </select>
+        </div>
       </div>
       <div class="field">
         <label for="f-baths">Baths</label>
-        <select id="f-baths">
-          <option value="0">Any number</option>
-          <option value="1">1+</option>
-          <option value="2">2+</option>
-          <option value="3">3+</option>
-        </select>
+        <div class="select-wrap">
+          <select id="f-baths">
+            <option value="0">Any number</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label for="f-min">Min price</label>
-        <input type="number" id="f-min" placeholder="$0">
-      </div>
-      <div class="field">
-        <label for="f-max">Max price</label>
-        <input type="number" id="f-max" placeholder="No max">
+      <div class="field price-field">
+        <label>Price</label>
+        <div class="price-group">
+          <input type="number" id="f-min" placeholder="Min" min="0" step="1000">
+          <input type="number" id="f-max" placeholder="Max" min="0" step="1000">
+        </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-clay search-btn">Search now</button>
+
+    <div class="divider-light"></div>
+    <button type="submit" class="btn-search-pill">Search now</button>
   </form>
 
   <p class="listings-note">Sample listings shown below for demonstration — connect an MLS/IDX feed to display live inventory.</p>
