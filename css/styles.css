@@ -189,13 +189,39 @@ p{margin:0 0 1em;color:var(--ink-soft);}
 .section-head.light h2{color:var(--paper);}
 
 /* ============ SOLD ============ */
-.sold{background:var(--sand);padding:6rem 0 2rem;}
-.sold .service-row{border-top:1px solid var(--line);}
-.sold .service-row:first-of-type{border-top:none;padding-top:0;}
-.stat-number{font-family:var(--serif);font-size:2.6rem;font-weight:500;color:var(--clay);line-height:1;}
-.stat-plus{font-family:var(--serif);font-size:1.6rem;color:var(--clay);}
-.sold-stat-line{font-size:1.02rem;}
-.sold-tagline{font-style:italic;color:var(--clay);font-size:.92rem;margin-top:1.5rem;}
+.sold{background:var(--sand);padding:6rem 0;}
+.sold-layout{
+  max-width:var(--max);margin:0 auto;padding:0 1.5rem;
+  display:grid;grid-template-columns:.85fr 1.15fr;gap:4.5rem;align-items:start;
+}
+
+/* offset photo collage */
+.sold-collage{position:relative;height:480px;}
+.collage-photo{
+  position:absolute;border-radius:3px;background-size:cover;background-position:center;
+  box-shadow:0 24px 48px rgba(42,33,22,.18);
+}
+.collage-photo--a{width:74%;height:62%;top:0;left:0;z-index:1;}
+.collage-photo--b{width:56%;height:44%;bottom:0;right:0;z-index:2;border:6px solid var(--paper);}
+.collage-photo--c{width:36%;height:32%;bottom:6%;left:2%;z-index:3;border:6px solid var(--paper);}
+
+.sold-badge{
+  position:absolute;top:-1.25rem;right:-.5rem;z-index:4;
+  background:var(--paper);border-radius:3px;padding:1.1rem 1.4rem;
+  box-shadow:0 16px 32px rgba(42,33,22,.16);
+  display:flex;align-items:baseline;gap:.85rem;
+}
+.stat-number{font-family:var(--serif);font-size:2.1rem;font-weight:500;color:var(--clay);line-height:1;}
+.stat-plus{font-family:var(--serif);font-size:1.3rem;color:var(--clay);}
+.sold-badge-label{font-size:.74rem;line-height:1.35;color:var(--ink-soft);font-weight:600;max-width:9ch;}
+
+/* numbered content list */
+.sold-list{display:flex;flex-direction:column;gap:2.5rem;padding-top:.5rem;}
+.sold-item{display:grid;grid-template-columns:2.4rem 1fr;gap:0;}
+.sold-item-num{font-family:var(--serif);font-size:1rem;color:var(--clay);font-weight:500;padding-top:.2em;}
+.sold-item h3{font-size:1.3rem;margin-bottom:.4em;}
+.sold-item p{max-width:48ch;}
+.sold-tagline{font-style:italic;color:var(--clay);font-size:.92rem;padding-left:2.4rem;margin-top:-1rem;}
 
 /* ============ AFFILIATIONS / BADGES ============ */
 .badges{
@@ -362,6 +388,8 @@ p{margin:0 0 1em;color:var(--ink-soft);}
   .main-nav.open{transform:translateX(0);}
   .nav-toggle{display:flex;}
   .about{grid-template-columns:1fr;}
+  .sold-layout{grid-template-columns:1fr;gap:3rem;}
+  .sold-collage{height:340px;margin-top:1.5rem;}
   .search-card-grid{grid-template-columns:1fr 1fr;}
   .gallery-grid{grid-template-columns:repeat(2,1fr);}
   .gallery-item.big{grid-column:span 2;grid-row:span 1;}
