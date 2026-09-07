@@ -120,6 +120,27 @@ document.getElementById('lightbox-close').addEventListener('click', () => lightb
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
 
+// ============ HERO CYCLING GALLERY (reuses the same photos as the gallery grid) ============
+const heroGallery = document.getElementById('hero-gallery');
+if (heroGallery) {
+  galleryItems.forEach((item, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'hero-slide' + (i === 0 ? ' is-active' : '');
+    slide.style.backgroundImage = item.bg;
+    heroGallery.appendChild(slide);
+  });
+
+  if (!prefersReducedMotion && galleryItems.length > 1) {
+    let current = 0;
+    const slides = heroGallery.querySelectorAll('.hero-slide');
+    setInterval(() => {
+      slides[current].classList.remove('is-active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('is-active');
+    }, 4500);
+  }
+}
+
 // ============ LISTINGS (sample data + client-side filter/sort) ============
 const sampleListings = [
   { addr: '412 Calvada Blvd, Pahrump, NV', price: 349000, beds: 3, baths: 2, type: 'single-family', date: '2026-08-20', bg: 'linear-gradient(135deg,#A8501F,#C79A3E)' },

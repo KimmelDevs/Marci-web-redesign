@@ -138,7 +138,7 @@ p{margin:0 0 1em;color:var(--ink-soft);}
 .hero{
   position:relative;
   min-height:88vh;
-  display:flex;align-items:flex-end;
+  display:flex;align-items:center;
   overflow:hidden;
   background:var(--dusk);
 }
@@ -157,7 +157,9 @@ p{margin:0 0 1em;color:var(--ink-soft);}
   position:relative;z-index:2;
   max-width:var(--max);margin:0 auto;padding:4rem 1.5rem 5rem;
   color:var(--paper);
+  display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;
 }
+.hero-copy{max-width:100%;}
 .eyebrow-plain{font-family:var(--sans);font-size:.85rem;font-weight:500;color:var(--gold);margin-bottom:1em;}
 .hero h1{
   color:var(--paper);
@@ -172,6 +174,25 @@ p{margin:0 0 1em;color:var(--ink-soft);}
   font-size:1.05rem;
 }
 .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;}
+
+/* ============ HERO CYCLING GALLERY ============ */
+.hero-gallery{
+  position:relative;
+  aspect-ratio:4/5;
+  width:100%;
+  border-radius:6px;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(to left, black 60%, transparent 100%);
+  mask-image:linear-gradient(to left, black 60%, transparent 100%);
+}
+.hero-slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:0;
+  transform:scale(1.06);
+  transition:opacity 1.4s ease, transform 6s ease;
+}
+.hero-slide.is-active{opacity:1;transform:scale(1);}
 
 /* ============ ABOUT ============ */
 .about{
@@ -389,6 +410,8 @@ p{margin:0 0 1em;color:var(--ink-soft);}
   }
   .main-nav.open{transform:translateX(0);}
   .nav-toggle{display:flex;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-gallery{display:none;}
   .about{grid-template-columns:1fr;}
   .sold-layout{grid-template-columns:1fr;gap:3rem;}
   .sold-collage{height:340px;margin-top:1.5rem;}
