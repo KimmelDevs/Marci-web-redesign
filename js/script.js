@@ -1,3 +1,6 @@
+// ============ MOTION PREFERENCE ============
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // ============ FOOTER YEAR ============
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -26,6 +29,36 @@ const setActive = () => {
 };
 window.addEventListener('scroll', setActive, { passive: true });
 setActive();
+
+// ============ SCROLL REVEALS ============
+const revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+if (prefersReducedMotion) {
+  revealEls.forEach(el => el.classList.add('is-visible'));
+} else {
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  revealEls.forEach(el => revealObs.observe(el));
+}
+
+// ============ HERO PARALLAX ============
+if (!prefersReducedMotion) {
+  const heroMedia = document.querySelector('.hero-media');
+  const hero = document.querySelector('.hero');
+  if (heroMedia && hero) {
+    window.addEventListener('scroll', () => {
+      const heroHeight = hero.offsetHeight;
+      if (window.scrollY < heroHeight) {
+        heroMedia.style.transform = `translateY(${window.scrollY * 0.28}px) scale(1.06)`;
+      }
+    }, { passive: true });
+  }
+}
 
 // ============ ANIMATED STAT COUNTERS (one orchestrated reveal) ============
 const counters = document.querySelectorAll('.stat-number[data-count-to]');
@@ -72,9 +105,10 @@ const galleryItems = [
 ];
 
 const galleryGrid = document.getElementById('gallery-grid');
-galleryItems.forEach(item => {
+galleryItems.forEach((item, index) => {
   const el = document.createElement('div');
-  el.className = 'gallery-item' + (item.big ? ' big' : '');
+  el.className = 'gallery-item' + (item.big ? ' big' : '') + (prefersReducedMotion ? '' : ' card-in');
+  if (!prefersReducedMotion) el.style.animationDelay = `${Math.min(index * 0.08, 0.6)}s`;
   el.style.backgroundImage = item.bg;
   el.innerHTML = `<span>${item.label}</span>`;
   el.addEventListener('click', () => openLightbox(item.bg));
@@ -113,9 +147,10 @@ function renderListings(items) {
     listingGrid.innerHTML = '<p class="listing-empty">No sample listings match those filters — try widening your search.</p>';
     return;
   }
-  items.forEach(item => {
+  items.forEach((item, index) => {
     const card = document.createElement('article');
-    card.className = 'listing-card';
+    card.className = 'listing-card' + (prefersReducedMotion ? '' : ' card-in');
+    if (!prefersReducedMotion) card.style.animationDelay = `${Math.min(index * 0.08, 0.5)}s`;
     const bedsBaths = item.type === 'land'
       ? 'Vacant land'
       : `${item.beds} bd &middot; ${item.baths} ba`;
