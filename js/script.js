@@ -88,20 +88,15 @@ if (counters.length) {
   counters.forEach(c => obs.observe(c));
 }
 
-// ============ GALLERY ============
-// NOTE: these are art-directed placeholder tiles (CSS gradients standing in for photography).
-// Swap the `bg` values below for real image paths (e.g. 'images/gallery-01.jpg') once photos
-// are downloaded from the live site — see IMAGES-NEEDED.md for the full list.
+// ============ GALLERY (real photos of the Mountain Falls community) ============
 const galleryItems = [
-  { label: 'Spring Mountains at dusk', bg: 'linear-gradient(135deg,#223140,#5a4a35)', big: true },
-  { label: 'Downtown Pahrump', bg: 'linear-gradient(135deg,#A8501F,#C79A3E)' },
-  { label: 'Valley vineyard rows', bg: 'linear-gradient(135deg,#6C7A5B,#3f4a34)' },
-  { label: 'Home for sale — front elevation', bg: 'linear-gradient(135deg,#7E3B15,#C79A3E)' },
-  { label: 'Mountain Falls community', bg: 'linear-gradient(135deg,#223140,#6C7A5B)' },
-  { label: 'Desert sunrise', bg: 'linear-gradient(135deg,#C79A3E,#A8501F)' },
-  { label: 'Backyard patio & pool', bg: 'linear-gradient(135deg,#3f4a34,#223140)' },
-  { label: 'Kitchen, recently sold', bg: 'linear-gradient(135deg,#A8501F,#7E3B15)' },
-  { label: 'Open range, Nye County', bg: 'linear-gradient(135deg,#6C7A5B,#C79A3E)' },
+  { label: 'Mountain Falls clubhouse & pools', bg: "url('images/gallery-clubhouse-pools.png')", big: true },
+  { label: 'Pickleball & tennis courts', bg: "url('images/gallery-courts-1.png')" },
+  { label: 'Community clubhouse', bg: "url('images/gallery-courts-2.png')" },
+  { label: 'Home for sale — aerial view', bg: "url('images/gallery-home-pool-1.png')" },
+  { label: 'Backyard pool & spa', bg: "url('images/gallery-home-pool-2.png')" },
+  { label: 'Desert-view sunroom', bg: "url('images/gallery-sunroom.png')" },
+  { label: 'Neighborhood pond & fairway', bg: "url('images/gallery-neighborhood-pond.png')" },
 ];
 
 const galleryGrid = document.getElementById('gallery-grid');
